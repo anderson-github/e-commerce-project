@@ -395,4 +395,6 @@ sketch
 pyvenv.cfg
 pip-selfcheck.json
 
+backend/.env
+
 # End of https://www.toptal.com/developers/gitignore/api/python,venv,pycharm+all,django,react,git
