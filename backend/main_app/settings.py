@@ -47,13 +47,11 @@ INSTALLED_APPS = [
 
     # DRF:
     'rest_framework',
-
-    # Simple JWT:
     'rest_framework_simplejwt',
 
     # My APPS:
     'clients',
-    'products',
+    'sales',
 
 ]
 
@@ -141,8 +139,14 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Set new USERS MODEL:
+AUTH_USER_MODEL = 'clients.Client'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
     )
 }
