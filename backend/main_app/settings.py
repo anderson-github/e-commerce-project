@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
-from pathlib import Path
-
 import environ
+from pathlib import Path
+from datetime import timedelta
+
 
 env = environ.Env(
     DEBUG=(bool, False),
@@ -150,3 +151,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
+}
+

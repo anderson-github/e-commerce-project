@@ -6,26 +6,27 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Client
 
 
-class SignUpView(APIView):
+class SignUp(APIView):
     """
     Sign up view to register new clients in the app.
     """
     permission_classes = (permissions.AllowAny,)
 
-    class Meta:
-        abstract = True
-
     class InputSerializer(serializers.Serializer):
-        username = serializers.CharField(required=True)
-        email = serializers.EmailField(required=True)
-        password = serializers.CharField(min_length=6, required=True)
-        firstName = serializers.CharField(required=True, source="first_name")
-        lastName = serializers.CharField(required=True, source="last_name")
+        username = serializers.CharField()
+        email = serializers.EmailField()
+        password = serializers.CharField(min_length=8)
+        firstName = serializers.CharField(source="first_name")
+        lastName = serializers.CharField(source="last_name")
+
+        class Meta:
+            abstract = True
+
 
     class OutputSerializer(InputSerializer):
         password = None
-        # accessToken = serializers.CharField(source="access_token")
-        # refreshToken = serializers.CharField(source="refresh_token")
+        accessToken = serializers.CharField(source="access_token")
+        refreshToken = serializers.CharField(source="refresh_token")
 
 
     def post(self, request):
@@ -47,7 +48,7 @@ class SignUpView(APIView):
         client = Client.objects.create_user(**serializer.validated_data)
 
         # Assigning token pair codes:
-        # jwt_tokens = RefreshToken.for_user(client)
+        refresh = RefreshToken.for_user(client)
 
         # Response as json file:
         serializer = self.OutputSerializer(
@@ -56,14 +57,14 @@ class SignUpView(APIView):
                 "email": client.email,
                 "first_name": client.first_name,
                 "last_name": client.last_name,
-                # "accessToken": str(jwt_tokens.access_token),
-                # "refreshToken": str(jwt_tokens.refresh_token),
+                "access_token": str(refresh.access_token),
+                "refresh_token": str(refresh),
             }
         )
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
 
-class LoginView(APIView):
+class Login(APIView):
     """
     Login view for created a clients.
     """
@@ -71,14 +72,14 @@ class LoginView(APIView):
     permission_classes = (permissions.AllowAny,)
 
     class InputSerializer(serializers.Serializer):
-        username = serializers.CharField(required=True)
-        password = serializers.CharField(min_length=6, required=True)
+        username = serializers.CharField()
+        password = serializers.CharField(min_length=8)
 
-    class OutputSerializer(InputSerializer):
+    class OutputSerializer(serializers.Serializer):
         username = serializers.CharField()
         email = serializers.EmailField()
-        firstName = serializers.CharField(source="first_name")
-        lastName = serializers.CharField(source="last_name")
+        # firstName = serializers.CharField(source="first_name")
+        # lastName = serializers.CharField(source="last_name")
         accessToken = serializers.CharField(source="access_token")
         refreshToken = serializers.CharField(source="refresh_token")
 
@@ -99,22 +100,20 @@ class LoginView(APIView):
 
         is_password_valid = client.check_password(serializer.validated_data["password"])
         if is_password_valid is False:
-            return Response({"error": "Username or Password is incorrect"},)
+            return Response("Username or password is incorrect", status=status.HTTP_400_BAD_REQUEST)
 
         # Assigning token pair codes:
-        jwt_tokens = RefreshToken.for_user(client)
+        refresh = RefreshToken.for_user(client)
 
         # Response to give back:
-        serializer = self.OutputSerializer(
-            {
-                "username": client.username,
-                "email": client.email,
-                "firstName": client.first_name,
-                "lastName": client.last_name,
-                "accessToken": str(jwt_tokens.access_token),
-                "refreshToken": str(jwt_tokens.refresh_token)
-            }
-        )
+        serializer = self.OutputSerializer({
+            "username": client.username,
+            "email": client.email,
+            # "firstName": client.first_name,
+            # "lastName": client.last_name,
+            "access_token": str(refresh.access_token),
+            "refresh_token": str(refresh)
+        })
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
@@ -128,7 +127,7 @@ class MyProfile(APIView):
         email = serializers.EmailField()
         firstName = serializers.CharField(source="first_name")
         lastName = serializers.CharField(source="last_name")
-        dateJoined = serializers.DateField(source="date_joined")
+        # dateJoined = serializers.DateField(source="date_joined")
 
 
     def get(self, request):
@@ -139,7 +138,7 @@ class MyProfile(APIView):
             "email": request.user.email,
             "first_name": request.user.first_name,
             "last_name": request.user.last_name,
-            "dateJoined": request.user.date_joined,
+            # "dateJoined": request.user.date_joined,
         })
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 

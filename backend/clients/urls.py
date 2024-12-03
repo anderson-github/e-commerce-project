@@ -3,7 +3,7 @@ from clients import views
 
 
 urlpatterns = [
-    path('signup/', views.SignUpView.as_view(), name='signup'),
-    path('login/', views.LoginView.as_view(), name='login'),
+    path('signup/', views.SignUp.as_view(), name='signup'),
+    path('login/', views.Login.as_view(), name='login'),
     path('my-profile/', views.MyProfile.as_view(), name='my-profile'),
 ]
