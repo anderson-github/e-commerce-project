@@ -14,7 +14,7 @@ const NotFound = () => {
                 ¡Ups! La página que busca no existe.
             </h1>
             <p className="text-gray-600">
-                It seems you may have taken a wrong turn. Don't worry, it happens to the best of us!
+                Tranquilo, ¡a veces nos desviamos del camino! No pasa nada, nos puede pasar a cualquiera.
             </p>
             <Link
                 to="/"
