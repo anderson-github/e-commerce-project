@@ -107,7 +107,7 @@ const MyOrders = () => {
 
                             {/* Order Status Filter */}
                             <div className="flex flex-col py-3 text-sm">
-                                <span className="font-medium px-4">Order Status</span>
+                                <span className="font-medium px-4">Estado del pedido</span>
                                 <div className="flex flex-col gap-3 px-4 mt-1 pb-3 border-b">
                                     <FormControl>
                                         <RadioGroup
