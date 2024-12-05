@@ -1,36 +1,21 @@
 // Footer.js
-import React, { useState, useEffect } from 'react';
-import './styles.css'
-
+import React from 'react';
+import './Footer.css';
 
 const Footer = () => {
-    return (
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-section">
-            <h3>About Us</h3>
-            <p>Your company description goes here. Make it brief but meaningful.</p>
-          </div>
-          <div className="footer-section">
-            <h3>Quick Links</h3>
-            <ul>
-              <li><a href="/privacy">Privacy Policy</a></li>
-              <li><a href="/terms">Terms of Service</a></li>
-              <li><a href="/faq">FAQ</a></li>
-            </ul>
-          </div>
-          <div className="footer-section">
-            <h3>Contact Info</h3>
-            <p>Email: contact@example.com</p>
-            <p>Phone: (123) 456-7890</p>
-            <p>Address: 123 Street Name, City, Country</p>
-          </div>
+  return (
+    <footer className="footer">
+      <div className="footer-content">
+        <div className="footer-section">
+          <h4>About Us</h4>
+          <p>Your trusted online shop since 2024</p>
         </div>
-        <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} Your Company. All rights reserved.</p>
+        <div className="footer-section">
+          <h4>Contact</h4>
+          <p>Email: support@myshop.com</p>
+          <p>Phone: (555) 123-4567</p>
         </div>
-      </footer>
-    );
-  };
-  
-  export default Footer;
+      </div>
+    </footer>
+  );
+};
