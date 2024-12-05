@@ -1,5 +1,0 @@
-# Archivo robots.txt para Final Ecommerce
-# Más información en https://www.robotstxt.org/robotstxt.html
-
-User-agent: *
-Allow: /
