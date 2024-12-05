@@ -1,0 +1,21 @@
+/* Sidebar Scrollbar Styles */
+.sidebar::-webkit-scrollbar {
+    width: 6px; /* Ajuste de ancho para mejor visibilidad */
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background-color: #2d3748; /* Color más acorde a temas oscuros modernos */
+    border-radius: 4px; /* Suaviza los bordes */
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: #718096; /* Mejor contraste con el track */
+    border-radius: 4px; /* Consistencia con el track */
+    border: 1px solid #4a5568; /* Añade borde para resaltar */
+}
+
+/* Asegura compatibilidad con navegadores que no soportan ::-webkit-scrollbar */
+.sidebar {
+    scrollbar-width: thin; /* Define un scrollbar delgado para Firefox */
+    scrollbar-color: #718096 #2d3748; /* Color del thumb y track en Firefox */
+}
