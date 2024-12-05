@@ -96,12 +96,12 @@ const MyOrders = () => {
                     <div className="hidden sm:flex flex-col w-1/5 px-1">
                         <div className="flex flex-col bg-white rounded-sm shadow">
                             <div className="flex items-center justify-between gap-5 px-4 py-2 border-b">
-                                <p className="text-lg font-medium">Filters</p>
+                                <p className="text-lg font-medium">Filtros</p>
                                 <span
                                     onClick={clearFilters}
                                     className="text-blue-600 font-medium text-sm uppercase cursor-pointer hover:text-blue-700"
                                 >
-                                    Clear All
+                                    Borrar todo
                                 </span>
                             </div>
 
@@ -130,7 +130,7 @@ const MyOrders = () => {
 
                             {/* Order Time Filter */}
                             <div className="flex flex-col pb-2 text-sm">
-                                <span className="font-medium px-4">Order Time</span>
+                                <span className="font-medium px-4">Horario de pedidos</span>
                                 <div className="flex flex-col gap-3 mt-1 px-4 pb-3">
                                     <FormControl>
                                         <RadioGroup
@@ -186,8 +186,8 @@ const MyOrders = () => {
                                             src="/assets/images/empty-orders.png"
                                             alt="No Orders Found"
                                         />
-                                        <span className="text-lg font-medium">No results found</span>
-                                        <p>Edit search or clear all filters</p>
+                                        <span className="text-lg font-medium">No se encontraron resultados</span>
+                                        <p>Editar búsqueda o borrar todos los filtros</p>
                                     </div>
                                 )}
 
