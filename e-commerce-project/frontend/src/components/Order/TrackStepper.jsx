@@ -3,7 +3,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 import { formatDate } from '../../utils/functions';
 
 const TrackStepper = ({ activeStep, orderCreatedAt, shippedAt, deliveredAt }) => {
-    // Array de pasos del seguimiento del pedido
+    // Pasos del seguimiento del pedido
     const steps = [
         {
             status: "Ordered",
@@ -19,7 +19,7 @@ const TrackStepper = ({ activeStep, orderCreatedAt, shippedAt, deliveredAt }) =>
         },
     ];
 
-    // Iconos de los pasos (completado y pendiente)
+    // Iconos para los estados de los pasos
     const completedIcon = (
         <span className="text-primary-green animate-pulse">
             <CircleIcon sx={{ fontSize: "16px" }} />
@@ -34,29 +34,17 @@ const TrackStepper = ({ activeStep, orderCreatedAt, shippedAt, deliveredAt }) =>
     return (
         <Stepper activeStep={activeStep} alternativeLabel>
             {steps.map((step, index) => (
-                <Step
-                    key={index}
-                    active={activeStep === index}
-                    completed={activeStep >= index}
-                >
-                    <StepLabel
-                        icon={activeStep >= index ? completedIcon : pendingIcon}
-                    >
+                <Step key={index} active={activeStep === index} completed={activeStep >= index}>
+                    <StepLabel icon={activeStep >= index ? completedIcon : pendingIcon}>
                         {activeStep >= index ? (
                             <div className="flex flex-col">
-                                <span className="text-primary-green font-medium">
-                                    {step.status}
-                                </span>
-                                {step.date !== "Invalid Date" && (
-                                    <span className="text-primary-green font-medium">
-                                        {step.date}
-                                    </span>
+                                <span className="text-primary-green font-medium">{step.status}</span>
+                                {step.date && step.date !== "Invalid Date" && (
+                                    <span className="text-primary-green font-medium">{step.date}</span>
                                 )}
                             </div>
                         ) : (
-                            <span className="text-gray-400 font-medium">
-                                {step.status}
-                            </span>
+                            <span className="text-gray-400 font-medium">{step.status}</span>
                         )}
                     </StepLabel>
                 </Step>
