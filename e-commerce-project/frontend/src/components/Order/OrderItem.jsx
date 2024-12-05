@@ -7,7 +7,10 @@ const OrderItem = (props) => {
     const { orderId, productName, productImage, unitPrice, quantity, createdAt, deliveredAt, orderStatus } = props;
 
     return (
-        <Link to={`/order-details/${orderId}`} className="flex p-4 items-start bg-white border rounded gap-2 sm:gap-0 hover:shadow-lg">
+        <Link
+            to={`/order-details/${orderId}`}
+            className="flex p-4 items-start bg-white border rounded gap-2 sm:gap-0 hover:shadow-lg"
+        >
             {/* Image Container */}
             <div className="w-full sm:w-32 h-20">
                 <img
@@ -22,7 +25,7 @@ const OrderItem = (props) => {
             <div className="flex flex-col sm:flex-row justify-between w-full">
                 {/* Product Info */}
                 <div className="flex flex-col gap-1 overflow-hidden">
-                    <p className="text-sm">
+                    <p className="text-sm font-medium">
                         {productName.length > 40 ? `${productName.substring(0, 40)}...` : productName}
                     </p>
                     <p className="text-xs text-gray-500 mt-2">Quantity: {quantity}</p>
@@ -33,7 +36,7 @@ const OrderItem = (props) => {
 
                 {/* Order Status and Price */}
                 <div className="flex flex-col sm:flex-row mt-1 sm:mt-0 gap-2 sm:gap-20 sm:w-1/2">
-                    <p className="text-sm">₹{unitPrice.toLocaleString()}</p>
+                    <p className="text-sm font-medium">₹{unitPrice.toLocaleString()}</p>
 
                     <div className="flex flex-col gap-1.5">
                         <p className="text-sm font-medium flex items-center gap-1">

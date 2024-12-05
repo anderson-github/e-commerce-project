@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
-import { clearErrors, myOrders } from '../../actions/orderActions'; // Ruta actualizada para la acción
+import { clearErrors, myOrders } from '../../actions/orderActions';
 import Loader from '../Layouts/Loader';
 import OrderItem from './OrderItem';
 import FormControl from '@mui/material/FormControl';
@@ -13,19 +13,23 @@ import MinCategory from '../Layouts/MinCategory';
 import MetaData from '../Layouts/MetaData';
 
 const orderStatus = ['Processing', 'Shipped', 'Delivered'];
-const dt = new Date();
-const ordertime = [dt.getMonth(), dt.getFullYear() - 1, dt.getFullYear() - 2];
+const currentDate = new Date();
+const orderTimes = [
+    { label: 'This Month', value: currentDate.getMonth() },
+    { label: currentDate.getFullYear() - 1, value: currentDate.getFullYear() - 1 },
+    { label: currentDate.getFullYear() - 2, value: currentDate.getFullYear() - 2 },
+];
 
 const MyOrders = () => {
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
 
     const [status, setStatus] = useState('');
-    const [orderTime, setOrderTime] = useState(0);
+    const [orderTime, setOrderTime] = useState('');
     const [search, setSearch] = useState('');
     const [filteredOrders, setFilteredOrders] = useState([]);
 
-    const { orders, loading, error } = useSelector((state) => state.orders); // Actualiza el estado según tu lógica
+    const { orders, loading, error } = useSelector((state) => state.orders);
 
     useEffect(() => {
         if (error) {
@@ -36,30 +40,29 @@ const MyOrders = () => {
     }, [dispatch, error, enqueueSnackbar]);
 
     useEffect(() => {
-        if (!loading) {
+        if (!loading && orders) {
             setFilteredOrders(orders);
         }
     }, [loading, orders]);
 
     useEffect(() => {
         setSearch('');
-        if (!status && +orderTime === 0) {
+        if (!status && !orderTime) {
             setFilteredOrders(orders);
             return;
         }
 
-        const filteredArr = orders.filter((order) => {
+        const filtered = orders.filter((order) => {
             const orderDate = new Date(order.createdAt);
             const matchesStatus = status ? order.orderStatus === status : true;
-            const matchesTime =
-                +orderTime === dt.getMonth()
-                    ? orderDate.getMonth() === +orderTime
-                    : orderDate.getFullYear() === +orderTime;
+            const matchesTime = orderTime
+                ? orderDate.getMonth() === +orderTime || orderDate.getFullYear() === +orderTime
+                : true;
 
             return matchesStatus && matchesTime;
         });
 
-        setFilteredOrders(filteredArr);
+        setFilteredOrders(filtered);
     }, [status, orderTime, orders]);
 
     const searchOrders = (e) => {
@@ -69,58 +72,61 @@ const MyOrders = () => {
             return;
         }
 
-        const filteredArr = orders.map((order) => ({
-            ...order,
-            orderItems: order.orderItems.filter((item) =>
-                item.name.toLowerCase().includes(search.toLowerCase())
-            ),
-        }));
-        setFilteredOrders(filteredArr);
+        const searchResults = orders
+            .map((order) => ({
+                ...order,
+                orderItems: order.orderItems.filter((item) =>
+                    item.name.toLowerCase().includes(search.toLowerCase())
+                ),
+            }))
+            .filter((order) => order.orderItems.length > 0);
+
+        setFilteredOrders(searchResults);
     };
 
     const clearFilters = () => {
         setStatus('');
-        setOrderTime(0);
+        setOrderTime('');
         setSearch('');
         setFilteredOrders(orders);
     };
 
     return (
         <>
-            <MetaData title="My Orders | Final E-commerce" />
-
+            <MetaData title="My Orders" />
             <MinCategory />
+
             <main className="w-full mt-16 sm:mt-0">
                 <div className="flex gap-3.5 mt-2 sm:mt-6 sm:mx-3 m-auto mb-7">
-                    {/* Sidebar Column */}
+                    {/* Sidebar */}
                     <div className="hidden sm:flex flex-col w-1/5 px-1">
                         <div className="flex flex-col bg-white rounded-sm shadow">
                             <div className="flex items-center justify-between gap-5 px-4 py-2 border-b">
-                                <p className="text-lg font-medium">Filtros</p>
+                                <p className="text-lg font-medium">Filters</p>
                                 <span
                                     onClick={clearFilters}
                                     className="text-blue-600 font-medium text-sm uppercase cursor-pointer hover:text-blue-700"
                                 >
-                                    Borrar todo
+                                    Clear All
                                 </span>
                             </div>
 
                             {/* Order Status Filter */}
                             <div className="flex flex-col py-3 text-sm">
-                                <span className="font-medium px-4">Estado del pedido</span>
+                                <span className="font-medium px-4">Order Status</span>
                                 <div className="flex flex-col gap-3 px-4 mt-1 pb-3 border-b">
                                     <FormControl>
                                         <RadioGroup
-                                            aria-labelledby="orderstatus-radio-buttons-group"
-                                            onChange={(e) => setStatus(e.target.value)}
+                                            aria-labelledby="order-status-filter"
                                             value={status}
+                                            onChange={(e) => setStatus(e.target.value)}
                                         >
-                                            {orderStatus.map((el, i) => (
+                                            {orderStatus.map((status, index) => (
                                                 <FormControlLabel
-                                                    value={el}
+                                                    key={index}
+                                                    value={status}
                                                     control={<Radio size="small" />}
-                                                    key={i}
-                                                    label={<span className="text-sm">{el}</span>}
+                                                    label={status}
                                                 />
                                             ))}
                                         </RadioGroup>
@@ -130,20 +136,20 @@ const MyOrders = () => {
 
                             {/* Order Time Filter */}
                             <div className="flex flex-col pb-2 text-sm">
-                                <span className="font-medium px-4">Horario de pedidos</span>
+                                <span className="font-medium px-4">Order Time</span>
                                 <div className="flex flex-col gap-3 mt-1 px-4 pb-3">
                                     <FormControl>
                                         <RadioGroup
-                                            aria-labelledby="ordertime-radio-buttons-group"
-                                            onChange={(e) => setOrderTime(e.target.value)}
+                                            aria-labelledby="order-time-filter"
                                             value={orderTime}
+                                            onChange={(e) => setOrderTime(e.target.value)}
                                         >
-                                            {ordertime.map((el, i) => (
+                                            {orderTimes.map(({ label, value }, index) => (
                                                 <FormControlLabel
-                                                    value={el}
+                                                    key={index}
+                                                    value={value}
                                                     control={<Radio size="small" />}
-                                                    key={i}
-                                                    label={<span className="text-sm">{i === 0 ? 'This Month' : el}</span>}
+                                                    label={label}
                                                 />
                                             ))}
                                         </RadioGroup>
@@ -153,7 +159,7 @@ const MyOrders = () => {
                         </div>
                     </div>
 
-                    {/* Orders Column */}
+                    {/* Orders Section */}
                     <div className="flex-1">
                         {loading ? (
                             <Loader />
@@ -164,9 +170,9 @@ const MyOrders = () => {
                                     className="flex items-center justify-between mx-1 sm:mx-0 sm:w-10/12 bg-white border rounded hover:shadow"
                                 >
                                     <input
+                                        type="search"
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
-                                        type="search"
                                         placeholder="Search your orders here"
                                         className="p-2 text-sm outline-none flex-1 rounded-l"
                                     />
@@ -175,34 +181,36 @@ const MyOrders = () => {
                                         className="h-full text-sm px-1 sm:px-4 py-2.5 text-white bg-primary-blue hover:bg-blue-600 rounded-r flex items-center gap-1"
                                     >
                                         <SearchIcon sx={{ fontSize: '22px' }} />
-                                        Search Orders
+                                        Search
                                     </button>
                                 </form>
 
-                                {filteredOrders.length === 0 && (
+                                {filteredOrders.length === 0 ? (
                                     <div className="flex items-center flex-col gap-2 p-8 bg-white">
                                         <img
                                             draggable="false"
                                             src="/assets/images/empty-orders.png"
                                             alt="No Orders Found"
                                         />
-                                        <span className="text-lg font-medium">No se encontraron resultados</span>
-                                        <p>Editar búsqueda o borrar todos los filtros</p>
+                                        <span className="text-lg font-medium">No orders found</span>
+                                        <p>Edit search or clear filters</p>
                                     </div>
+                                ) : (
+                                    filteredOrders
+                                        .flatMap((order) =>
+                                            order.orderItems.map((item, index) => (
+                                                <OrderItem
+                                                    key={index}
+                                                    {...item}
+                                                    orderId={order._id}
+                                                    orderStatus={order.orderStatus}
+                                                    createdAt={order.createdAt}
+                                                    deliveredAt={order.deliveredAt}
+                                                />
+                                            ))
+                                        )
+                                        .reverse()
                                 )}
-
-                                {filteredOrders.map((order) =>
-                                    order.orderItems.map((item, index) => (
-                                        <OrderItem
-                                            {...item}
-                                            key={index}
-                                            orderId={order._id}
-                                            orderStatus={order.orderStatus}
-                                            createdAt={order.createdAt}
-                                            deliveredAt={order.deliveredAt}
-                                        />
-                                    ))
-                                ).reverse()}
                             </div>
                         )}
                     </div>

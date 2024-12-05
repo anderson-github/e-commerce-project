@@ -5,48 +5,49 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import DownloadIcon from '@mui/icons-material/Download';
 
 const SecondaryDropDownMenu = () => {
-
     const navs = [
         {
             title: "Notification Preferences",
             icon: <NotificationsIcon sx={{ fontSize: "18px" }} />,
-            redirect: "https://www.flipkart.com/communication-preferences/push",
+            redirect: "/notification-preferences",
         },
         {
-            title: "Sell on Flipkart",
+            title: "Sell Your Products",
             icon: <BusinessCenterIcon sx={{ fontSize: "18px" }} />,
-            redirect: "https://seller.flipkart.com/sell-online",
+            redirect: "/sell-products",
         },
         {
-            title: "24x7 Customer Care",
+            title: "Customer Support",
             icon: <LiveHelpIcon sx={{ fontSize: "18px" }} />,
-            redirect: "https://www.flipkart.com/helpcentre",
+            redirect: "/customer-support",
         },
         {
-            title: "Advertise",
+            title: "Advertise With Us",
             icon: <TrendingUpIcon sx={{ fontSize: "18px" }} />,
-            redirect: "https://advertising.flipkart.com",
+            redirect: "/advertising",
         },
         {
             title: "Download App",
             icon: <DownloadIcon sx={{ fontSize: "18px" }} />,
-            redirect: "https://www.flipkart.com/mobile-apps",
+            redirect: "/download-app",
         },
-    ]
+    ];
 
     return (
         <div className="absolute w-60 -right-2 top-9 bg-white shadow-2xl rounded flex-col text-sm">
-
             {navs.map((item, i) => {
-
                 const { title, icon, redirect } = item;
 
                 return (
-                    <a className="pl-3 py-3.5 border-b flex gap-3 items-center hover:bg-gray-50 rounded-t" href={redirect} key={i}>
+                    <a
+                        className="pl-3 py-3.5 border-b flex gap-3 items-center hover:bg-gray-50 rounded-t"
+                        href={redirect}
+                        key={i}
+                    >
                         <span className="text-primary-blue">{icon}</span>
                         {title}
                     </a>
-                )
+                );
             })}
 
             <div className="absolute right-1/2 -top-2.5">

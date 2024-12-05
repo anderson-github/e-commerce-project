@@ -1,8 +1,9 @@
+
 import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { clearErrors, getOrderDetails } from '../../actions/orderActions'; // Actualizar la ruta de la acción
+import { clearErrors, getOrderDetails } from '../../actions/orderActions';
 import Loader from '../Layouts/Loader';
 import TrackStepper from './TrackStepper';
 import MinCategory from '../Layouts/MinCategory';
@@ -13,7 +14,7 @@ const OrderDetails = () => {
     const { enqueueSnackbar } = useSnackbar();
     const params = useParams();
 
-    const { order, error, loading } = useSelector((state) => state.orderDetails); // Asegúrate de que el reducer está configurado correctamente en "final".
+    const { order, error, loading } = useSelector((state) => state.orderDetails);
 
     useEffect(() => {
         if (error) {
@@ -26,8 +27,8 @@ const OrderDetails = () => {
     return (
         <>
             <MetaData title="Order Details | E-commerce Final" />
-
             <MinCategory />
+
             <main className="w-full mt-14 sm:mt-4">
                 {loading ? (
                     <Loader />
@@ -40,7 +41,9 @@ const OrderDetails = () => {
                                     <div className="sm:w-1/2 border-r">
                                         <div className="flex flex-col gap-3 my-8 mx-10">
                                             <h3 className="font-medium text-lg">Delivery Address</h3>
-                                            <h4 className="font-medium">{order.client.firstName} {order.client.lastName}</h4>
+                                            <h4 className="font-medium">
+                                                {order.client.firstName} {order.client.lastName}
+                                            </h4>
                                             <p className="text-sm">{`${order.shippingInfo.address}, ${order.shippingInfo.city}, ${order.shippingInfo.state} - ${order.shippingInfo.postalCode}`}</p>
                                             <div className="flex gap-2 text-sm">
                                                 <p className="font-medium">Email:</p>
