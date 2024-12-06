@@ -1,35 +1,56 @@
-const ErrorHandler = require("../utils/errorHandler");
-
 module.exports = (err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.message = err.message || "Internal Server Error";
+    // Establecer valores predeterminados para el código de estado y mensaje de error
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Internal Server Error";
 
-    // mongodb id error
-    if (err.name === "CastError") {
-        const message = `Resource Not Found. Invalid: ${err.path}`;
-        err = new ErrorHandler(message, 400)
-    }
-
-    // mongoose duplicate key error
-    if (err.code === 11000) {
-        const message = `Duplicate ${Object.keys(err.keyValue)} entered`;
-        err = new ErrorHandler(message, 400);
-    }
-
-    // wrong jwt error
-    if (err.code === "JsonWebTokenError") {
-        const message = 'JWT Error';
-        err = new ErrorHandler(message, 400);
-    }
-
-    // jwt expire error
-    if (err.code === "JsonWebTokenError") {
-        const message = 'JWT is Expired';
-        err = new ErrorHandler(message, 400);
-    }
-
-    res.status(err.statusCode).json({
+    // Inicializar un objeto de respuesta simplificado
+    const errorResponse = {
         success: false,
-        message: err.message,
-    });
-}
+        message,
+    };
+
+    // Manejo de errores específicos
+
+    // Error de formato de ID (por ejemplo, Sequelize u otro ORM)
+    if (err.name === "SequelizeDatabaseError" || err.name === "CastError") {
+        errorResponse.message = `Invalid resource identifier: ${err.path || "unknown"}`;
+        errorResponse.statusCode = 400;
+    }
+
+    // Error de clave duplicada (por ejemplo, Sequelize Unique Constraint)
+    if (err.name === "SequelizeUniqueConstraintError" || err.code === 11000) {
+        errorResponse.message = `Duplicate field value entered`;
+        errorResponse.statusCode = 400;
+    }
+
+    // Error de JWT (Token Inválido o Expirado)
+    if (err.name === "JsonWebTokenError") {
+        errorResponse.message = "Invalid JWT Token";
+        errorResponse.statusCode = 401;
+    }
+
+    if (err.name === "TokenExpiredError") {
+        errorResponse.message = "JWT Token has expired";
+        errorResponse.statusCode = 401;
+    }
+
+    // Respuesta del servidor
+    res.status(statusCode).json(errorResponse);
+};
+
+
+/*
+// Este middleware se puede usar directamente en la cadena de middlewares de Express:
+
+const express = require('express');
+const errorMiddleware = require('./middlewares/errorMiddleware');
+
+const app = express();
+
+// Otros middlewares y rutas
+
+app.use(errorMiddleware); // Manejo centralizado de errores
+
+module.exports = app;
+
+*/

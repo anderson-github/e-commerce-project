@@ -1,27 +1,33 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
-const ErrorHandler = require('../utils/errorHandler');
-const asyncErrorHandler = require('./asyncErrorHandler');
+const { User } = require('../models'); // Ajustar la importación al modelo en "final"
+const asyncHandler = require('./asyncHandler');
 
-exports.isAuthenticatedUser = asyncErrorHandler(async (req, res, next) => {
-
-    const { token } = req.cookies;
+// Middleware para verificar si el usuario está autenticado
+exports.isAuthenticatedUser = asyncHandler(async (req, res, next) => {
+    const token = req.headers.authorization?.split(" ")[1]; // Obtener el token del encabezado de autorización
 
     if (!token) {
-        return next(new ErrorHandler("Please Login to Access", 401))
+        return res.status(401).json({ success: false, message: "Please login to access this resource." });
     }
 
     const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await User.findById(decodedData.id);
+    req.user = await User.findByPk(decodedData.id); // Usar findByPk para Sequelize
+    if (!req.user) {
+        return res.status(404).json({ success: false, message: "User not found." });
+    }
+
     next();
 });
 
+// Middleware para autorizar roles específicos
 exports.authorizeRoles = (...roles) => {
     return (req, res, next) => {
-
         if (!roles.includes(req.user.role)) {
-            return next(new ErrorHandler(`Role: ${req.user.role} is not allowed`, 403));
+            return res.status(403).json({ 
+                success: false, 
+                message: `Role: ${req.user.role} is not allowed to access this resource.` 
+            });
         }
         next();
-    }
-}
+    };
+};

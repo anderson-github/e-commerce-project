@@ -1,39 +1,46 @@
-// const nodeMailer = require('nodemailer');
-const sgMail = require('@sendgrid/mail')
+const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const sendEmail = async (options) => {
+const sendEmail = async ({ email, templateId, data }) => {
+    try {
+        const msg = {
+            to: email,
+            from: process.env.SENDGRID_MAIL, // Correo autorizado por SendGrid
+            templateId: templateId, // ID de la plantilla dinámica en SendGrid
+            dynamic_template_data: data, // Datos dinámicos para la plantilla
+        };
 
-    // const transporter = nodeMailer.createTransport({
-    //     host: process.env.SMTP_HOST,
-    //     port: process.env.SMTP_PORT,
-    //     service: process.env.SMTP_SERVICE,
-    //     auth: {
-    //         user: process.env.SMTP_MAIL,
-    //         pass: process.env.SMTP_PASSWORD,
-    //     },
-    // });
-
-    // const mailOptions = {
-    //     from: process.env.SMTP_MAIL,
-    //     to: options.email,
-    //     subject: options.subject,
-    //     html: options.message,
-    // };
-
-    // await transporter.sendMail(mailOptions);
-
-    const msg = {
-        to: options.email,
-        from: process.env.SENDGRID_MAIL,
-        templateId: options.templateId,
-        dynamic_template_data: options.data,
+        await sgMail.send(msg);
+        console.log('Email sent successfully');
+    } catch (error) {
+        console.error('Error sending email:', error.message);
+        throw new Error('Failed to send email');
     }
-    sgMail.send(msg).then(() => {
-        console.log('Email Sent')
-    }).catch((error) => {
-        console.error(error)
-    });
 };
 
 module.exports = sendEmail;
+
+
+/*
+// Ejemplificación del modelo
+
+const sendEmail = require('../utils/sendEmail');
+
+const sendOrderConfirmationEmail = async (order) => {
+    try {
+        await sendEmail({
+            email: order.user.email,
+            templateId: process.env.SENDGRID_ORDER_TEMPLATEID,
+            data: {
+                name: order.user.name,
+                orderId: order._id,
+                totalPrice: order.totalPrice,
+                shippingAddress: order.shippingInfo.address,
+            },
+        });
+    } catch (error) {
+        console.error('Error sending order confirmation email:', error.message);
+    }
+};
+
+*/

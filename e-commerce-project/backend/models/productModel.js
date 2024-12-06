@@ -1,122 +1,111 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const productSchema = new mongoose.Schema({
+// Esquema de Producto
+const productSchema = new Schema({
     name: {
         type: String,
-        required: [true, "Please enter product name"],
-        trim: true
+        required: [true, "Please enter the product name"],
+        trim: true,
     },
     description: {
         type: String,
-        required: [true, "Please enter product description"]
+        required: [true, "Please enter the product description"],
     },
-    highlights: [
-        {
-            type: String,
-            required: true
-        }
-    ],
-    specifications: [
-        {
-            title: {
-                type: String,
-                required: true
-            },
-            description: {
-                type: String,
-                required: true
-            }
-        }
-    ],
     price: {
         type: Number,
-        required: [true, "Please enter product price"]
+        required: [true, "Please enter the product price"],
     },
     cuttedPrice: {
         type: Number,
-        required: [true, "Please enter cutted price"]
+        required: [true, "Please enter the cutted price"],
     },
     images: [
         {
-            public_id: {
-                type: String,
-                required: true
-            },
-            url: {
-                type: String,
-                required: true
-            }
-        }
+            publicId: { type: String, required: true }, // Simplificado
+            url: { type: String, required: true },
+        },
     ],
     brand: {
-        name: {
-            type: String,
-            required: true
-        },
+        name: { type: String, required: true },
         logo: {
-            public_id: {
-                type: String,
-                required: true,
-            },
-            url: {
-                type: String,
-                required: true,
-            }
-        }
+            publicId: { type: String, required: true },
+            url: { type: String, required: true },
+        },
     },
     category: {
         type: String,
-        required: [true, "Please enter product category"]
+        required: [true, "Please enter the product category"],
     },
     stock: {
         type: Number,
-        required: [true, "Please enter product stock"],
-        maxlength: [4, "Stock cannot exceed limit"],
-        default: 1
+        required: [true, "Please enter the product stock"],
+        max: [9999, "Stock cannot exceed 9999 units"],
+        default: 1,
     },
     warranty: {
         type: Number,
-        default: 1
+        default: 1, // Default warranty is 1 year
     },
     ratings: {
         type: Number,
-        default: 0
+        default: 0,
     },
     numOfReviews: {
         type: Number,
-        default: 0
+        default: 0,
     },
     reviews: [
         {
             user: {
-                type: mongoose.Schema.ObjectId,
+                type: Schema.Types.ObjectId,
                 ref: "User",
-                required: true
+                required: true,
             },
-            name: {
-                type: String,
-                required: true
-            },
-            rating: {
-                type: Number,
-                required: true
-            },
-            comment: {
-                type: String,
-                required: true
-            }
-        }
+            name: { type: String, required: true },
+            rating: { type: Number, required: true },
+            comment: { type: String, required: true },
+        },
     ],
-
-    user: {
-        type: mongoose.Schema.ObjectId,
+    createdBy: {
+        type: Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        required: true,
     },
     createdAt: {
         type: Date,
-        default: Date.now
-    }
+        default: Date.now,
+    },
 });
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = model("Product", productSchema);
+
+
+/*
+// Este esquema puede ser utilizado en el controlador para crear un producto:
+
+const Product = require('../models/productModel');
+
+// Crear un Producto
+const newProduct = new Product({
+    name: "Smartphone",
+    description: "High-end smartphone with great features.",
+    price: 499.99,
+    cuttedPrice: 599.99,
+    images: [
+        { publicId: "img123", url: "https://example.com/image1.jpg" },
+        { publicId: "img124", url: "https://example.com/image2.jpg" },
+    ],
+    brand: {
+        name: "TechBrand",
+        logo: { publicId: "brandLogo123", url: "https://example.com/logo.jpg" },
+    },
+    category: "Electronics",
+    stock: 50,
+    ratings: 4.5,
+    numOfReviews: 10,
+    createdBy: userId, // Este valor será dinámico
+});
+
+await newProduct.save();
+
+*/

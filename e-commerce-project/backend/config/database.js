@@ -1,11 +1,29 @@
-const mongoose = require('mongoose');
-const MONGO_URI = process.env.MONGO_URI;
+const pgp = require('pg-promise')();
 
-const connectDatabase = () => {
-    mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-        .then(() => {
-            console.log("Mongoose Connected");
-        });
-}
+const DB_HOST = process.env.DB_HOST;
+const DB_PORT = process.env.DB_PORT;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_NAME = process.env.DB_NAME;
 
-module.exports = connectDatabase;
+const connection = {
+    host: DB_HOST,
+    port: DB_PORT,
+    database: DB_NAME,
+    user: DB_USER,
+    password: DB_PASSWORD,
+};
+
+const db = pgp(connection);
+
+const connectDatabase = async () => {
+    try {
+        await db.connect();
+        console.log('PostgreSQL Connected');
+    } catch (error) {
+        console.error('Failed to connect to PostgreSQL:', error.message);
+        process.exit(1);
+    }
+};
+
+module.exports = { db, connectDatabase };

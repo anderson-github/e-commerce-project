@@ -1,32 +1,26 @@
+const { Order, Product, User } = require('../models'); // Importar modelos usando Sequelize
 const asyncErrorHandler = require('../middlewares/asyncErrorHandler');
-const Order = require('../models/orderModel');
-const Product = require('../models/productModel');
 const ErrorHandler = require('../utils/errorHandler');
 const sendEmail = require('../utils/sendEmail');
 
-// Create New Order
+// Crear Nueva Orden
 exports.newOrder = asyncErrorHandler(async (req, res, next) => {
+    const { shippingInfo, orderItems, paymentInfo, totalPrice } = req.body;
 
-    const {
-        shippingInfo,
-        orderItems,
-        paymentInfo,
-        totalPrice,
-    } = req.body;
-
-    const orderExist = await Order.findOne({ paymentInfo });
+    // Verificar si ya existe una orden con el mismo pago
+    const orderExist = await Order.findOne({ where: { paymentInfo } });
 
     if (orderExist) {
         return next(new ErrorHandler("Order Already Placed", 400));
     }
 
     const order = await Order.create({
-        shippingInfo,
-        orderItems,
-        paymentInfo,
+        shippingInfo: JSON.stringify(shippingInfo),
+        orderItems: JSON.stringify(orderItems),
+        paymentInfo: JSON.stringify(paymentInfo),
         totalPrice,
-        paidAt: Date.now(),
-        user: req.user._id,
+        paidAt: new Date(),
+        userId: req.user.id, // Sequelize utiliza userId como FK
     });
 
     await sendEmail({
@@ -37,8 +31,8 @@ exports.newOrder = asyncErrorHandler(async (req, res, next) => {
             shippingInfo,
             orderItems,
             totalPrice,
-            oid: order._id,
-        }
+            oid: order.id,
+        },
     });
 
     res.status(201).json({
@@ -47,10 +41,13 @@ exports.newOrder = asyncErrorHandler(async (req, res, next) => {
     });
 });
 
-// Get Single Order Details
+// Obtener Detalles de una Orden
 exports.getSingleOrderDetails = asyncErrorHandler(async (req, res, next) => {
-
-    const order = await Order.findById(req.params.id).populate("user", "name email");
+    const order = await Order.findByPk(req.params.id, {
+        include: [
+            { model: User, attributes: ['name', 'email'] },
+        ],
+    });
 
     if (!order) {
         return next(new ErrorHandler("Order Not Found", 404));
@@ -62,14 +59,12 @@ exports.getSingleOrderDetails = asyncErrorHandler(async (req, res, next) => {
     });
 });
 
-
-// Get Logged In User Orders
+// Obtener Órdenes del Usuario Logueado
 exports.myOrders = asyncErrorHandler(async (req, res, next) => {
+    const orders = await Order.findAll({ where: { userId: req.user.id } });
 
-    const orders = await Order.find({ user: req.user._id });
-
-    if (!orders) {
-        return next(new ErrorHandler("Order Not Found", 404));
+    if (!orders.length) {
+        return next(new ErrorHandler("No Orders Found", 404));
     }
 
     res.status(200).json({
@@ -78,20 +73,15 @@ exports.myOrders = asyncErrorHandler(async (req, res, next) => {
     });
 });
 
-
-// Get All Orders ---ADMIN
+// Obtener Todas las Órdenes (ADMIN)
 exports.getAllOrders = asyncErrorHandler(async (req, res, next) => {
+    const orders = await Order.findAll();
 
-    const orders = await Order.find();
-
-    if (!orders) {
-        return next(new ErrorHandler("Order Not Found", 404));
+    if (!orders.length) {
+        return next(new ErrorHandler("No Orders Found", 404));
     }
 
-    let totalAmount = 0;
-    orders.forEach((order) => {
-        totalAmount += order.totalPrice;
-    });
+    const totalAmount = orders.reduce((acc, order) => acc + order.totalPrice, 0);
 
     res.status(200).json({
         success: true,
@@ -100,10 +90,9 @@ exports.getAllOrders = asyncErrorHandler(async (req, res, next) => {
     });
 });
 
-// Update Order Status ---ADMIN
+// Actualizar Estado de Orden (ADMIN)
 exports.updateOrder = asyncErrorHandler(async (req, res, next) => {
-
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findByPk(req.params.id);
 
     if (!order) {
         return next(new ErrorHandler("Order Not Found", 404));
@@ -114,40 +103,42 @@ exports.updateOrder = asyncErrorHandler(async (req, res, next) => {
     }
 
     if (req.body.status === "Shipped") {
-        order.shippedAt = Date.now();
-        order.orderItems.forEach(async (i) => {
-            await updateStock(i.product, i.quantity)
-        });
+        order.shippedAt = new Date();
+        const orderItems = JSON.parse(order.orderItems);
+
+        for (const item of orderItems) {
+            await updateStock(item.productId, item.quantity);
+        }
     }
 
     order.orderStatus = req.body.status;
     if (req.body.status === "Delivered") {
-        order.deliveredAt = Date.now();
+        order.deliveredAt = new Date();
     }
 
-    await order.save({ validateBeforeSave: false });
+    await order.save();
 
     res.status(200).json({
-        success: true
+        success: true,
     });
 });
 
-async function updateStock(id, quantity) {
-    const product = await Product.findById(id);
+// Actualizar Inventario de Productos
+async function updateStock(productId, quantity) {
+    const product = await Product.findByPk(productId);
     product.stock -= quantity;
-    await product.save({ validateBeforeSave: false });
+    await product.save();
 }
 
-// Delete Order ---ADMIN
+// Eliminar Orden (ADMIN)
 exports.deleteOrder = asyncErrorHandler(async (req, res, next) => {
-
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findByPk(req.params.id);
 
     if (!order) {
         return next(new ErrorHandler("Order Not Found", 404));
     }
 
-    await order.remove();
+    await order.destroy();
 
     res.status(200).json({
         success: true,
