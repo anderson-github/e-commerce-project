@@ -1,148 +1,134 @@
+
+// Lista de departamentos de Colombia con sus respectivos códigos y nombres
 const states = [
-    {
-      "code": "AN",
-      "name": "Andaman and Nicobar Islands"
-    },
-    {
-      "code": "AP",
-      "name": "Andhra Pradesh"
-    },
-    {
-      "code": "AR",
-      "name": "Arunachal Pradesh"
-    },
-    {
-      "code": "AS",
-      "name": "Assam"
-    },
-    {
-      "code": "BR",
-      "name": "Bihar"
-    },
-    {
-      "code": "CG",
-      "name": "Chandigarh"
-    },
-    {
-      "code": "CH",
-      "name": "Chhattisgarh"
-    },
-    {
-      "code": "DH",
-      "name": "Dadra and Nagar Haveli"
-    },
-    {
-      "code": "DD",
-      "name": "Daman and Diu"
-    },
-    {
-      "code": "DL",
-      "name": "Delhi"
-    },
-    {
-      "code": "GA",
-      "name": "Goa"
-    },
-    {
-      "code": "GJ",
-      "name": "Gujarat"
-    },
-    {
-      "code": "HR",
-      "name": "Haryana"
-    },
-    {
-      "code": "HP",
-      "name": "Himachal Pradesh"
-    },
-    {
-      "code": "JK",
-      "name": "Jammu and Kashmir"
-    },
-    {
-      "code": "JH",
-      "name": "Jharkhand"
-    },
-    {
-      "code": "KA",
-      "name": "Karnataka"
-    },
-    {
-      "code": "KL",
-      "name": "Kerala"
-    },
-    {
-      "code": "LD",
-      "name": "Lakshadweep"
-    },
-    {
-      "code": "MP",
-      "name": "Madhya Pradesh"
-    },
-    {
-      "code": "MH",
-      "name": "Maharashtra"
-    },
-    {
-      "code": "MN",
-      "name": "Manipur"
-    },
-    {
-      "code": "ML",
-      "name": "Meghalaya"
-    },
-    {
-      "code": "MZ",
-      "name": "Mizoram"
-    },
-    {
-      "code": "NL",
-      "name": "Nagaland"
-    },
-    {
-      "code": "OR",
-      "name": "Odisha"
-    },
-    {
-      "code": "PY",
-      "name": "Puducherry"
-    },
-    {
-      "code": "PB",
-      "name": "Punjab"
-    },
-    {
-      "code": "RJ",
-      "name": "Rajasthan"
-    },
-    {
-      "code": "SK",
-      "name": "Sikkim"
-    },
-    {
-      "code": "TN",
-      "name": "Tamil Nadu"
-    },
-    {
-      "code": "TS",
-      "name": "Telangana"
-    },
-    {
-      "code": "TR",
-      "name": "Tripura"
-    },
-    {
-      "code": "UP",
-      "name": "Uttar Pradesh"
-    },
-    {
-      "code": "UK",
-      "name": "Uttarakhand"
-    },
-    {
-      "code": "WB",
-      "name": "West Bengal"
-    }
-  ]
+  {
+      "code": "AMA",
+      "name": "Amazonas"
+  },
+  {
+      "code": "ANT",
+      "name": "Antioquia"
+  },
+  {
+      "code": "ARA",
+      "name": "Arauca"
+  },
+  {
+      "code": "ATL",
+      "name": "Atlántico"
+  },
+  {
+      "code": "BOL",
+      "name": "Bolívar"
+  },
+  {
+      "code": "BOY",
+      "name": "Boyacá"
+  },
+  {
+      "code": "CAL",
+      "name": "Caldas"
+  },
+  {
+      "code": "CAQ",
+      "name": "Caquetá"
+  },
+  {
+      "code": "CAS",
+      "name": "Casanare"
+  },
+  {
+      "code": "CAU",
+      "name": "Cauca"
+  },
+  {
+      "code": "CES",
+      "name": "Cesar"
+  },
+  {
+      "code": "CHO",
+      "name": "Chocó"
+  },
+  {
+      "code": "COR",
+      "name": "Córdoba"
+  },
+  {
+      "code": "CUN",
+      "name": "Cundinamarca"
+  },
+  {
+      "code": "GUA",
+      "name": "Guainía"
+  },
+  {
+      "code": "GUV",
+      "name": "Guaviare"
+  },
+  {
+      "code": "HUI",
+      "name": "Huila"
+  },
+  {
+      "code": "LAG",
+      "name": "La Guajira"
+  },
+  {
+      "code": "MAG",
+      "name": "Magdalena"
+  },
+  {
+      "code": "MET",
+      "name": "Meta"
+  },
+  {
+      "code": "NAR",
+      "name": "Nariño"
+  },
+  {
+      "code": "NSA",
+      "name": "Norte de Santander"
+  },
+  {
+      "code": "PUT",
+      "name": "Putumayo"
+  },
+  {
+      "code": "QUI",
+      "name": "Quindío"
+  },
+  {
+      "code": "RIS",
+      "name": "Risaralda"
+  },
+  {
+      "code": "SAN",
+      "name": "Santander"
+  },
+  {
+      "code": "SAP",
+      "name": "San Andrés y Providencia"
+  },
+  {
+      "code": "SUC",
+      "name": "Sucre"
+  },
+  {
+      "code": "TOL",
+      "name": "Tolima"
+  },
+  {
+      "code": "VAC",
+      "name": "Valle del Cauca"
+  },
+  {
+      "code": "VAU",
+      "name": "Vaupés"
+  },
+  {
+      "code": "VID",
+      "name": "Vichada"
+  }
+];
 
 export default states;

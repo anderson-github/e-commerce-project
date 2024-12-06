@@ -1,3 +1,4 @@
+// Importación de constantes relacionadas con productos
 import {
     ADMIN_PRODUCTS_FAIL,
     ADMIN_PRODUCTS_REQUEST,
@@ -38,8 +39,8 @@ import {
     SLIDER_PRODUCTS_SUCCESS,
 } from "../constants/productConstants";
 
+// Reducer para manejar los productos
 export const productsReducer = (state = { products: [] }, { type, payload }) => {
-
     switch (type) {
         case ALL_PRODUCTS_REQUEST:
         case ADMIN_PRODUCTS_REQUEST:
@@ -77,10 +78,10 @@ export const productsReducer = (state = { products: [] }, { type, payload }) => 
         default:
             return state;
     }
-}
+};
 
+// Reducer para manejar los detalles de un producto específico
 export const productDetailsReducer = (state = { product: {} }, { type, payload }) => {
-
     switch (type) {
         case PRODUCT_DETAILS_REQUEST:
             return {
@@ -110,9 +111,9 @@ export const productDetailsReducer = (state = { product: {} }, { type, payload }
         default:
             return state;
     }
-}
+};
 
-// New Review Reducer
+// Reducer para manejar las reseñas de productos
 export const newReviewReducer = (state = {}, { type, payload }) => {
     switch (type) {
         case NEW_REVIEW_REQUEST:
@@ -144,9 +145,9 @@ export const newReviewReducer = (state = {}, { type, payload }) => {
         default:
             return state;
     }
-}
+};
 
-// New Product Reducer
+// Reducer para manejar la creación de nuevos productos
 export const newProductReducer = (state = { product: {} }, { type, payload }) => {
     switch (type) {
         case NEW_PRODUCT_REQUEST:
@@ -179,9 +180,9 @@ export const newProductReducer = (state = { product: {} }, { type, payload }) =>
         default:
             return state;
     }
-}
+};
 
-// New Product Reducer
+// Reducer para manejar actualizaciones y eliminaciones de productos
 export const productReducer = (state = {}, { type, payload }) => {
     switch (type) {
         case UPDATE_PRODUCT_REQUEST:
@@ -227,10 +228,10 @@ export const productReducer = (state = {}, { type, payload }) => {
         default:
             return state;
     }
-}
+};
 
+// Reducer para manejar todas las reseñas de un producto
 export const productReviewsReducer = (state = { reviews: [] }, { type, payload }) => {
-
     switch (type) {
         case ALL_REVIEWS_REQUEST:
             return {
@@ -256,10 +257,10 @@ export const productReviewsReducer = (state = { reviews: [] }, { type, payload }
         default:
             return state;
     }
-}
+};
 
+// Reducer para manejar acciones de reseñas específicas (eliminar)
 export const reviewReducer = (state = {}, { type, payload }) => {
-
     switch (type) {
         case DELETE_REVIEW_REQUEST:
             return {
@@ -290,4 +291,4 @@ export const reviewReducer = (state = {}, { type, payload }) => {
         default:
             return state;
     }
-}
+};

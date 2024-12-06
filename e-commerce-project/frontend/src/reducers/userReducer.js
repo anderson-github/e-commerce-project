@@ -1,3 +1,4 @@
+// Importación de constantes necesarias para las acciones relacionadas con usuarios
 import {
     LOGIN_USER_REQUEST,
     LOGIN_USER_SUCCESS,
@@ -42,6 +43,7 @@ import {
     REMOVE_USER_DETAILS,
 } from '../constants/userConstants';
 
+// Reducer para gestionar el estado de autenticación y usuario actual
 export const userReducer = (state = { user: {} }, { type, payload }) => {
     switch (type) {
         case LOGIN_USER_REQUEST:
@@ -81,13 +83,13 @@ export const userReducer = (state = { user: {} }, { type, payload }) => {
                 isAuthenticated: false,
                 user: null,
                 error: payload,
-            }
+            };
         case LOGOUT_USER_FAIL:
             return {
                 ...state,
                 loading: false,
                 error: payload,
-            }
+            };
         case CLEAR_ERRORS:
             return {
                 ...state,
@@ -98,6 +100,7 @@ export const userReducer = (state = { user: {} }, { type, payload }) => {
     }
 };
 
+// Reducer para gestionar las actualizaciones de perfil y contraseña
 export const profileReducer = (state = {}, { type, payload }) => {
     switch (type) {
         case UPDATE_PROFILE_REQUEST:
@@ -130,19 +133,19 @@ export const profileReducer = (state = {}, { type, payload }) => {
                 ...state,
                 loading: false,
                 error: payload,
-            }
+            };
         case UPDATE_PROFILE_RESET:
         case UPDATE_PASSWORD_RESET:
         case UPDATE_USER_RESET:
             return {
                 ...state,
                 isUpdated: false,
-            }
+            };
         case DELETE_USER_RESET:
             return {
                 ...state,
                 isDeleted: false,
-            }
+            };
         case CLEAR_ERRORS:
             return {
                 ...state,
@@ -153,6 +156,7 @@ export const profileReducer = (state = {}, { type, payload }) => {
     }
 };
 
+// Reducer para gestionar el estado relacionado con el olvido y reinicio de contraseña
 export const forgotPasswordReducer = (state = {}, { type, payload }) => {
     switch (type) {
         case FORGOT_PASSWORD_REQUEST:
@@ -190,6 +194,7 @@ export const forgotPasswordReducer = (state = {}, { type, payload }) => {
     }
 };
 
+// Reducer para gestionar la lista de usuarios (ADMIN)
 export const allUsersReducer = (state = { users: [] }, { type, payload }) => {
     switch (type) {
         case ALL_USERS_REQUEST:
@@ -219,6 +224,7 @@ export const allUsersReducer = (state = { users: [] }, { type, payload }) => {
     }
 };
 
+// Reducer para gestionar los detalles de un usuario (ADMIN)
 export const userDetailsReducer = (state = { user: {} }, { type, payload }) => {
     switch (type) {
         case USER_DETAILS_REQUEST:

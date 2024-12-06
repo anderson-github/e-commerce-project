@@ -3,22 +3,20 @@
 @tailwind utilities;
 
 body {
-    background-color: #f1f3f6;
-    font-family: 'Roboto', sans-serif;
+    background-color: #f1f3f6; /* Color de fondo para el cuerpo */
+    font-family: 'Roboto', sans-serif; /* Fuente principal */
 }
 
-/* hover navbar dropdown arrow */
+/* Estilo para la flecha desplegable del menú de navegación */
 .arrow_down {
-  border-left: 11px solid transparent;
-  border-right: 11px solid transparent;
-  border-bottom: 11px solid #fff;
+  border-left: 11px solid transparent; /* Borde izquierdo transparente */
+  border-right: 11px solid transparent; /* Borde derecho transparente */
+  border-bottom: 11px solid #fff; /* Borde inferior con color blanco */
 }
-/* hover navbar dropdown arrow */
 
-/* login signup sidebar bg image */
+/* Imagen de fondo para el panel lateral de inicio de sesión/registro */
 .loginSidebar {
-    background-image: url("https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/login_img_c4a81e.png");
-    background-position: center 85%;
-    background-repeat: no-repeat;
+    background-image: url("https://via.placeholder.com/300x600.png?text=Login+Sidebar"); /* URL de ejemplo para la imagen */
+    background-position: center 85%; /* Posición centrada en el 85% vertical */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
 }
-/* login signup sidebar bg image */

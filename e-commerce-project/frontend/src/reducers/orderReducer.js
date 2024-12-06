@@ -1,5 +1,32 @@
-import { NEW_ORDER_REQUEST, NEW_ORDER_SUCCESS, NEW_ORDER_FAIL, CLEAR_ERRORS, MY_ORDERS_FAIL, MY_ORDERS_SUCCESS, MY_ORDERS_REQUEST, PAYMENT_STATUS_REQUEST, PAYMENT_STATUS_SUCCESS, PAYMENT_STATUS_FAIL, ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_DETAILS_FAIL, ALL_ORDERS_REQUEST, ALL_ORDERS_SUCCESS, ALL_ORDERS_FAIL, UPDATE_ORDER_REQUEST, DELETE_ORDER_REQUEST, UPDATE_ORDER_SUCCESS, DELETE_ORDER_SUCCESS, UPDATE_ORDER_FAIL, DELETE_ORDER_FAIL, UPDATE_ORDER_RESET, DELETE_ORDER_RESET } from "../constants/orderConstants";
+// Importar constantes relacionadas con las órdenes
+import { 
+    NEW_ORDER_REQUEST, 
+    NEW_ORDER_SUCCESS, 
+    NEW_ORDER_FAIL, 
+    CLEAR_ERRORS, 
+    MY_ORDERS_FAIL, 
+    MY_ORDERS_SUCCESS, 
+    MY_ORDERS_REQUEST, 
+    PAYMENT_STATUS_REQUEST, 
+    PAYMENT_STATUS_SUCCESS, 
+    PAYMENT_STATUS_FAIL, 
+    ORDER_DETAILS_REQUEST, 
+    ORDER_DETAILS_SUCCESS, 
+    ORDER_DETAILS_FAIL, 
+    ALL_ORDERS_REQUEST, 
+    ALL_ORDERS_SUCCESS, 
+    ALL_ORDERS_FAIL, 
+    UPDATE_ORDER_REQUEST, 
+    DELETE_ORDER_REQUEST, 
+    UPDATE_ORDER_SUCCESS, 
+    DELETE_ORDER_SUCCESS, 
+    UPDATE_ORDER_FAIL, 
+    DELETE_ORDER_FAIL, 
+    UPDATE_ORDER_RESET, 
+    DELETE_ORDER_RESET 
+} from "../constants/orderConstants";
 
+// Reducer para manejar la creación de nuevas órdenes
 export const newOrderReducer = (state = {}, { type, payload }) => {
     switch (type) {
         case NEW_ORDER_REQUEST:
@@ -27,6 +54,7 @@ export const newOrderReducer = (state = {}, { type, payload }) => {
     }
 };
 
+// Reducer para manejar las órdenes del usuario
 export const myOrdersReducer = (state = { orders: [] }, { type, payload }) => {
     switch (type) {
         case MY_ORDERS_REQUEST:
@@ -53,6 +81,7 @@ export const myOrdersReducer = (state = { orders: [] }, { type, payload }) => {
     }
 };
 
+// Reducer para manejar el estado del pago
 export const paymentStatusReducer = (state = { txn: {} }, { type, payload }) => {
     switch (type) {
         case PAYMENT_STATUS_REQUEST:
@@ -79,6 +108,7 @@ export const paymentStatusReducer = (state = { txn: {} }, { type, payload }) => 
     }
 };
 
+// Reducer para manejar los detalles de una orden específica
 export const orderDetailsReducer = (state = { order: {} }, { type, payload }) => {
     switch (type) {
         case ORDER_DETAILS_REQUEST:
@@ -105,7 +135,7 @@ export const orderDetailsReducer = (state = { order: {} }, { type, payload }) =>
     }
 };
 
-
+// Reducer para manejar todas las órdenes (administrador)
 export const allOrdersReducer = (state = { orders: [] }, { type, payload }) => {
     switch (type) {
         case ALL_ORDERS_REQUEST:
@@ -132,6 +162,7 @@ export const allOrdersReducer = (state = { orders: [] }, { type, payload }) => {
     }
 };
 
+// Reducer para manejar acciones de actualización o eliminación de órdenes
 export const orderReducer = (state = {}, { type, payload }) => {
     switch (type) {
         case UPDATE_ORDER_REQUEST:

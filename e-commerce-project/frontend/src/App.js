@@ -38,207 +38,241 @@ import Wishlist from './components/Wishlist/Wishlist';
 import NotFound from './components/NotFound';
 
 function App() {
-
   const dispatch = useDispatch();
   const { pathname } = useLocation();
-  // const [stripeApiKey, setStripeApiKey] = useState("");
 
-  // async function getStripeApiKey() {
-  //   const { data } = await axios.get('/api/v1/stripeapikey');
-  //   setStripeApiKey(data.stripeApiKey);
-  // }
-
+  // Cargar fuentes web de Google
   useEffect(() => {
     WebFont.load({
       google: {
-        families: ["Roboto:300,400,500,600,700"]
+        families: ["Roboto:300,400,500,600,700"],
       },
     });
-  });
+  }, []);
 
+  // Cargar datos del usuario al inicio
   useEffect(() => {
     dispatch(loadUser());
-    // getStripeApiKey();
   }, [dispatch]);
 
-  // always scroll to top on route/path change
+  // Siempre desplazar al inicio al cambiar de ruta
   useEffect(() => {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
-  }, [pathname])
+  }, [pathname]);
 
-  // disable right click
-  window.addEventListener("contextmenu", (e) => e.preventDefault());
-  window.addEventListener("keydown", (e) => {
-    if (e.keyCode == 123) e.preventDefault();
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 73) e.preventDefault();
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 74) e.preventDefault();
-  });
-  
+  // Deshabilitar clic derecho y teclas específicas
+  useEffect(() => {
+    const disableActions = (e) => {
+      if (e.type === "contextmenu") e.preventDefault();
+      if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && [73, 74].includes(e.keyCode))) {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("contextmenu", disableActions);
+    window.addEventListener("keydown", disableActions);
+
+    // Limpiar listeners al desmontar
+    return () => {
+      window.removeEventListener("contextmenu", disableActions);
+      window.removeEventListener("keydown", disableActions);
+    };
+  }, []);
+
   return (
     <>
       <Header />
       <Routes>
+        {/* Rutas públicas */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
-        <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:keyword" element={<Products />} />
-
+        <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
-
-        {/* order process */}
-        <Route path="/shipping" element={
-          <ProtectedRoute>
-            <Shipping />
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/order/confirm" element={
-          <ProtectedRoute>
-            <OrderConfirm />
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/process/payment" element={
-          <ProtectedRoute>
-            {/* // stripeApiKey && ( */}
-            {/* // <Elements stripe={loadStripe(stripeApiKey)}> */}
-            <Payment />
-            {/* // </Elements> */}
-            {/* ) */}
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/orders/success" element={<OrderSuccess success={true} />} />
-        <Route path="/orders/failed" element={<OrderSuccess success={false} />} />
-        {/* order process */}
-
-        <Route path="/order/:id" element={
-          <ProtectedRoute>
-            <OrderStatus />
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/orders" element={
-          <ProtectedRoute>
-            <MyOrders />
-          </ProtectedRoute>
-        }></Route>
-
-        <Route path="/order_details/:id" element={
-          <ProtectedRoute>
-            <OrderDetails />
-          </ProtectedRoute>
-        }></Route>
-
-        <Route path="/account" element={
-          <ProtectedRoute>
-            <Account />
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/account/update" element={
-          <ProtectedRoute>
-            <UpdateProfile />
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/password/update" element={
-          <ProtectedRoute>
-            <UpdatePassword />
-          </ProtectedRoute>
-        } ></Route>
-
         <Route path="/password/forgot" element={<ForgotPassword />} />
-
         <Route path="/password/reset/:token" element={<ResetPassword />} />
 
-        <Route path="/wishlist" element={
-          <ProtectedRoute>
-            <Wishlist />
-          </ProtectedRoute>
-        } ></Route>
+        {/* Rutas protegidas */}
+        <Route
+          path="/shipping"
+          element={
+            <ProtectedRoute>
+              <Shipping />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/order/confirm"
+          element={
+            <ProtectedRoute>
+              <OrderConfirm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/process/payment"
+          element={
+            <ProtectedRoute>
+              <Payment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <MyOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/order/:id"
+          element={
+            <ProtectedRoute>
+              <OrderStatus />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/order_details/:id"
+          element={
+            <ProtectedRoute>
+              <OrderDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            <ProtectedRoute>
+              <Account />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/account/update"
+          element={
+            <ProtectedRoute>
+              <UpdateProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/password/update"
+          element={
+            <ProtectedRoute>
+              <UpdatePassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/admin/dashboard" element={
-          <ProtectedRoute isAdmin={true}>
-            <Dashboard activeTab={0}>
-              <MainData />
-            </Dashboard>
-          </ProtectedRoute>
-        } ></Route>
+        {/* Rutas de administrador */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute isAdmin={true}>
+              <Dashboard activeTab={0}>
+                <MainData />
+              </Dashboard>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/orders"
+          element={
+            <ProtectedRoute isAdmin={true}>
+              <Dashboard activeTab={1}>
+                <OrderTable />
+              </Dashboard>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/order/:id"
+          element={
+            <ProtectedRoute isAdmin={true}>
+              <Dashboard activeTab={1}>
+                <UpdateOrder />
+              </Dashboard>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/products"
+          element={
+            <ProtectedRoute isAdmin={true}>
+              <Dashboard activeTab={2}>
+                <ProductTable />
+              </Dashboard>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/new_product"
+          element={
+            <ProtectedRoute isAdmin={true}>
+              <Dashboard activeTab={3}>
+                <NewProduct />
+              </Dashboard>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/product/:id"
+          element={
+            <ProtectedRoute isAdmin={true}>
+              <Dashboard activeTab={2}>
+                <UpdateProduct />
+              </Dashboard>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute isAdmin={true}>
+              <Dashboard activeTab={4}>
+                <UserTable />
+              </Dashboard>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/user/:id"
+          element={
+            <ProtectedRoute isAdmin={true}>
+              <Dashboard activeTab={4}>
+                <UpdateUser />
+              </Dashboard>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/reviews"
+          element={
+            <ProtectedRoute isAdmin={true}>
+              <Dashboard activeTab={5}>
+                <ReviewsTable />
+              </Dashboard>
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/admin/orders" element={
-          <ProtectedRoute isAdmin={true}>
-            <Dashboard activeTab={1}>
-              <OrderTable />
-            </Dashboard>
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/admin/order/:id" element={
-          <ProtectedRoute isAdmin={true}>
-            <Dashboard activeTab={1}>
-              <UpdateOrder />
-            </Dashboard>
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/admin/products" element={
-          <ProtectedRoute isAdmin={true}>
-            <Dashboard activeTab={2}>
-              <ProductTable />
-            </Dashboard>
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/admin/new_product" element={
-          <ProtectedRoute isAdmin={true}>
-            <Dashboard activeTab={3}>
-              <NewProduct />
-            </Dashboard>
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/admin/product/:id" element={
-          <ProtectedRoute isAdmin={true}>
-            <Dashboard activeTab={2}>
-              <UpdateProduct />
-            </Dashboard>
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/admin/users" element={
-          <ProtectedRoute isAdmin={true}>
-            <Dashboard activeTab={4}>
-              <UserTable />
-            </Dashboard>
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/admin/user/:id" element={
-          <ProtectedRoute isAdmin={true}>
-            <Dashboard activeTab={4}>
-              <UpdateUser />
-            </Dashboard>
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="/admin/reviews" element={
-          <ProtectedRoute isAdmin={true}>
-            <Dashboard activeTab={5}>
-              <ReviewsTable />
-            </Dashboard>
-          </ProtectedRoute>
-        } ></Route>
-
-        <Route path="*" element={<NotFound />}></Route>
-
+        {/* Ruta para páginas no encontradas */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </>
