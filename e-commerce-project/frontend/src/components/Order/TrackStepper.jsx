@@ -1,51 +1,21 @@
 import { Step, StepLabel, Stepper } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
-import { formatDate } from '../../utils/functions';
 
-const TrackStepper = ({ activeStep, orderCreatedAt, shippedAt, deliveredAt }) => {
-    // Pasos del seguimiento del pedido
-    const steps = [
-        {
-            status: "Ordered",
-            date: formatDate(orderCreatedAt),
-        },
-        {
-            status: "Shipped",
-            date: formatDate(shippedAt),
-        },
-        {
-            status: "Delivered",
-            date: formatDate(deliveredAt),
-        },
-    ];
+const TrackStepper = ({ activeStep }) => {
+    // Pasos estáticos sin fechas dinámicas
+    const steps = ["Ordered", "Shipped", "Delivered"];
 
-    // Iconos para los estados de los pasos
-    const completedIcon = (
-        <span className="text-primary-green animate-pulse">
-            <CircleIcon sx={{ fontSize: "16px" }} />
-        </span>
-    );
-    const pendingIcon = (
-        <span className="text-gray-400">
-            <CircleIcon sx={{ fontSize: "16px" }} />
-        </span>
-    );
+    // Ícono estático para todos los estados
+    const icon = <CircleIcon sx={{ fontSize: "16px" }} />;
 
     return (
         <Stepper activeStep={activeStep} alternativeLabel>
-            {steps.map((step, index) => (
+            {steps.map((status, index) => (
                 <Step key={index} active={activeStep === index} completed={activeStep >= index}>
-                    <StepLabel icon={activeStep >= index ? completedIcon : pendingIcon}>
-                        {activeStep >= index ? (
-                            <div className="flex flex-col">
-                                <span className="text-primary-green font-medium">{step.status}</span>
-                                {step.date && step.date !== "Invalid Date" && (
-                                    <span className="text-primary-green font-medium">{step.date}</span>
-                                )}
-                            </div>
-                        ) : (
-                            <span className="text-gray-400 font-medium">{step.status}</span>
-                        )}
+                    <StepLabel icon={icon}>
+                        <span className={activeStep >= index ? "text-primary-green font-medium" : "text-gray-400 font-medium"}>
+                            {status}
+                        </span>
                     </StepLabel>
                 </Step>
             ))}

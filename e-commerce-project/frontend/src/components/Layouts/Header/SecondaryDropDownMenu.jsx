@@ -9,50 +9,40 @@ const SecondaryDropDownMenu = () => {
         {
             title: "Notification Preferences",
             icon: <NotificationsIcon sx={{ fontSize: "18px" }} />,
-            redirect: "/notification-preferences",
         },
         {
             title: "Sell Your Products",
             icon: <BusinessCenterIcon sx={{ fontSize: "18px" }} />,
-            redirect: "/sell-products",
         },
         {
             title: "Customer Support",
             icon: <LiveHelpIcon sx={{ fontSize: "18px" }} />,
-            redirect: "/customer-support",
         },
         {
             title: "Advertise With Us",
             icon: <TrendingUpIcon sx={{ fontSize: "18px" }} />,
-            redirect: "/advertising",
         },
         {
             title: "Download App",
             icon: <DownloadIcon sx={{ fontSize: "18px" }} />,
-            redirect: "/download-app",
         },
     ];
 
     return (
         <div className="absolute w-60 -right-2 top-9 bg-white shadow-2xl rounded flex-col text-sm">
             {navs.map((item, i) => {
-                const { title, icon, redirect } = item;
+                const { title, icon } = item;
 
                 return (
-                    <a
+                    <div
                         className="pl-3 py-3.5 border-b flex gap-3 items-center hover:bg-gray-50 rounded-t"
-                        href={redirect}
                         key={i}
                     >
                         <span className="text-primary-blue">{icon}</span>
                         {title}
-                    </a>
+                    </div>
                 );
             })}
-
-            <div className="absolute right-1/2 -top-2.5">
-                <div className="arrow_down"></div>
-            </div>
         </div>
     );
 };

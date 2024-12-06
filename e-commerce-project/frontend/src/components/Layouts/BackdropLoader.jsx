@@ -1,14 +1,9 @@
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
-
 const BackdropLoader = () => {
+    // Puedes sustituir el indicador de carga por un mensaje estático o un componente básico
     return (
-        <Backdrop
-            sx={{ color: '#fff', zIndex: 1500 }}
-            open={true}
-        >
-            <CircularProgress color="inherit" />
-        </Backdrop>
+        <div className="text-center">
+            <p>Loading...</p> {/* Cargando componentes, por favor espere.*/}
+        </div>
     );
 };
 
