@@ -9,6 +9,7 @@ const Footer = () => {
         <div className="footer-section">
           <h4>About Us</h4>
           <p>Your trusted online shop since 2024</p>
+          <p>Milkway Road 567, Asteroid Road.</p>
         </div>
         <div className="footer-section">
           <h4>Contact</h4>
@@ -19,3 +20,5 @@ const Footer = () => {
     </footer>
   );
 };
+
+export default Footer;

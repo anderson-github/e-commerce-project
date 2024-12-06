@@ -23,3 +23,5 @@ const Cart = ({ items, total }) => {
     </div>
   );
 };
+
+export default Cart;

@@ -6,13 +6,8 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Products
-        fields = [
-            'id',
-            'name',
-            'price',
-            'type',
-            'stock',
-        ]
+        fields = ['id', 'name', 'description',
+                  'price', 'image', 'created_at', 'updated_at']
 
 
 class OrderLineSerializer(serializers.ModelSerializer):
@@ -21,11 +16,7 @@ class OrderLineSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderLines
-        fields = [
-            "product_name",
-            "quantity",
-            "total_price",
-        ]
+        fields = ["product_name", "quantity", "total_price"]
 
     def get_product_name(self, obj):
         return obj.product.name

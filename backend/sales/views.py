@@ -27,6 +27,33 @@ class ProductsView(APIView):
         return Response(serializer.data)
 
 
+class CreateProductView(APIView):
+    """
+
+    """
+    def post(self, request):
+        serializer = ProductSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        product = Products.objects.create(**serializer.validated_data)
+
+        return Response(data={"message": "Product Created Successfully"}, status=status.HTTP_201_CREATED)
+
+
+class DeleteProductsView(APIView):
+    """
+
+    """
+    def post(self, request, product_id: int = None):
+        try:
+            product = Products.objects.get(id=product_id)
+            product.delete()
+        except Products.DoesNotExist:
+            return Response("Product doesn't exist", status=status.HTTP_404_NOT_FOUND)
+
+        return Response(data={"message": "Product Deleted"}, status=status.HTTP_200_OK)
+
+
 class OrdersView(APIView):
 
     class InputSerializer(serializers.Serializer):

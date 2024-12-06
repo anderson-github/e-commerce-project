@@ -8,9 +8,14 @@ class Products(models.Model):
     Products Model to manage type and info about products db.
     """
     name = models.CharField(max_length=100, null=False, verbose_name="Product Name")
+    description = models.TextField(verbose_name="Product Description")
     price = models.DecimalField(decimal_places=2, verbose_name="Product Price", max_digits=10)
-    type = models.CharField(max_length=100, null=False, verbose_name="Product Type")
-    stock = models.IntegerField(verbose_name="Product Stock")
+    image = models.URLField(verbose_name="Product Image")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Product Created")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Product Updated")
+
+    def __str__(self):
+        return self.name
 
 
 class Orders(models.Model):

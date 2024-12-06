@@ -4,13 +4,8 @@ from .models import Products, Orders, OrderLines
 
 class ProductsAdmin(admin.ModelAdmin):
     model = Products
-    list_display = [
-        "id",
-        "name",
-        "price",
-        "type",
-        "stock",
-    ]
+    list_display = ['id', 'name', 'description',
+                  'price', 'image', 'created_at', 'updated_at']
 
 
 class OrderLinesAdmin(admin.StackedInline):
