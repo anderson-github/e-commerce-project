@@ -1,1 +1,7 @@
-web: gunicorn main_app.wsgi
+web: npm run start
+# --------------------------------------------  
+# Archivo Procfile Finalizado (para entornos como Heroku)
+# --------------------------------------------
+# web: npm run start
+
+
