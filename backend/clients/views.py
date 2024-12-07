@@ -16,8 +16,8 @@ class SignUp(APIView):
         username = serializers.CharField()
         email = serializers.EmailField()
         password = serializers.CharField(min_length=8)
-        firstName = serializers.CharField(source="first_name")
-        lastName = serializers.CharField(source="last_name")
+        # firstName = serializers.CharField(source="first_name")
+        # lastName = serializers.CharField(source="last_name")
 
         class Meta:
             abstract = True
@@ -55,8 +55,8 @@ class SignUp(APIView):
             {
                 "username": client.username,
                 "email": client.email,
-                "first_name": client.first_name,
-                "last_name": client.last_name,
+                # "first_name": client.first_name,
+                # "last_name": client.last_name,
                 "access_token": str(refresh.access_token),
                 "refresh_token": str(refresh),
             }

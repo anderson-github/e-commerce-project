@@ -7,7 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Products
         fields = ['id', 'name', 'description',
-                  'price', 'image', 'created_at', 'updated_at']
+                  'price', 'created_at', 'updated_at']
 
 
 class OrderLineSerializer(serializers.ModelSerializer):

@@ -1,0 +1,12 @@
+.cart {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+  }
